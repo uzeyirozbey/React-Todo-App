@@ -1,30 +1,33 @@
-import  { OGRENCI_PENDING, OGRENCI_LISTELE , OGRENCI_LISTELE_HATA } from "../actions/ogrenci"
+import  
+{
+     OGRENCI_EKLE_PENDING, 
+     OGRENCI_EKLE , 
+     OGRENCI_EKLE_HATA
+} from "../actions/ogrenciEkle"
 //hata vermemesi için
 const initialState = {
-  fetching             : true,
+  fetching             : false,
   ogrenci              : [],
   error                : {}
 };
 export default (state = initialState, action) => {
     switch (action.type) {
-        //Öğrenci listele////////////
-        case OGRENCI_PENDING:
+        case OGRENCI_EKLE_PENDING:
             return {
                 ...state,
-                //Yükleme devam ediyor loading true
                 fetching : true
             }
-        case OGRENCI_LISTELE:
+        case OGRENCI_EKLE:
             return {
                 ...state,
                 ogrenci : action.payload,
-                //Yükleme işlemi bitti . loading false
                 fetching : false
             }
-        case OGRENCI_LISTELE_HATA:
+        case OGRENCI_EKLE_HATA:
             return {
                 ...state,
-                error : action.payload
+                error : action.payload,
+                fetching : false
             }
         default:
             return state

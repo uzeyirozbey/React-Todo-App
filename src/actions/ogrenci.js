@@ -1,9 +1,9 @@
+  
 import {BASE_API_URL} from '../config/env';
 import axios from "axios";
 export const OGRENCI_PENDING      = "OGRENCI_PENDING";
 export const OGRENCI_LISTELE      = "OGRENCI_LISTELE";
 export const OGRENCI_LISTELE_HATA = "OGRENCI_LISTELE_HATA";
-
 export function fetchOgrenci(){
   return dispatch => {
   const params ={

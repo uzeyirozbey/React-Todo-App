@@ -1,13 +1,24 @@
 import React, { Component } from 'react';
+import PropTypes from "prop-types";
 import {Button,Form} from 'semantic-ui-react';
 import InlineError from './InlineError';
+import { Message } from 'semantic-ui-react'
 class OgrenciEkleForm extends Component{
+     constructor(props){
+         super(props);
+         console.log(props);
+    }
     state = {
         Ad          : '',
         Soyad       : '',
         TcKimlikNo  : '',
         DogumTarihi : '',
         errors      : {}
+    }
+
+    static propTypes = {
+        //ekleme fonksiyonu
+        yeniOgrenciEkle : PropTypes.func.isRequired
     }
 
     handleChange = (e) => {
@@ -21,13 +32,18 @@ class OgrenciEkleForm extends Component{
         this.setState({
             errors
         });
+        //validationdan geçmişse actionu çalıştır
+        if(Object.keys(errors).length === 0){
+          this.props.yeniOgrenciEkle(this.state);
+        }
     };
 
     //validate işlemleri
     validate = () => {
         const errors = {};
-        if(!this.state.Ad)          {errors.Ad         = "Ad alanı zorunlu!!"}   
-        if(!this.state.Soyad)       {errors.Soyad      = "Soyad alanı zorunlu!!"}
+        console.log(this.props.ogrenciEkle.fetching);
+        if(!this.state.Ad)          {errors.Ad          = "Ad alanı zorunlu!!"}   
+        if(!this.state.Soyad)       {errors.Soyad       = "Soyad alanı zorunlu!!"}
         if(!this.state.TcKimlikNo)  {errors.TcKimlikNo  = "Tc Kimlik No alanı zorunlu!!"}
         if(!this.state.DogumTarihi) {errors.DogumTarihi = "Doğum tarihi alanı zorunlu!!"}
         return errors;
@@ -37,9 +53,9 @@ class OgrenciEkleForm extends Component{
         const {errors} = this.state;
         return (
             <div>
-             <Form onSubmit={this.onSubmit}>
-               <Form.Field>
-                    <label>Tc Kimlik No</label>
+             <Form onSubmit={this.onSubmit} loading ={ this.props.ogrenciEkle.fetching}>
+               <Form.Field error={!!errors.TcKimlikNo}>
+                    <label>Tc Kimlik No </label>
                     {errors.TcKimlikNo && <InlineError message={ errors.TcKimlikNo }/>}
                     <input
                       id          = "TcKimlikNo"
@@ -49,7 +65,7 @@ class OgrenciEkleForm extends Component{
                       placeholder = 'Tc Kimlik No' />
                 </Form.Field>
                
-                <Form.Field>
+                <Form.Field error={!!errors.Ad}>
                     <label>Ad</label>
                     {errors.Ad && <InlineError message={ errors.Ad }/>}
                     <input
@@ -60,7 +76,7 @@ class OgrenciEkleForm extends Component{
                       placeholder= 'Ad' />
                 </Form.Field>
 
-                <Form.Field>
+                <Form.Field error={!!errors.Soyad}>
                     <label>Soyad</label>
                     {errors.Soyad && <InlineError message={ errors.Soyad }/>}
                     <input 
@@ -71,7 +87,7 @@ class OgrenciEkleForm extends Component{
                      placeholder = 'Soyad' />
                 </Form.Field>
 
-                <Form.Field>
+                <Form.Field error={!!errors.DogumTarihi}>
                     <label>Doğum Tarihi</label>
                     { errors.DogumTarihi && <InlineError message={ errors.DogumTarihi }/>}
 
@@ -82,8 +98,17 @@ class OgrenciEkleForm extends Component{
                      onChange   ={this.handleChange }
                      placeholder='Dogum Tarihi' />
                 </Form.Field>
-
+                 <div className="clearfix"></div>
                 <Button  color='teal' type='submit'>Kaydet</Button>
+                {
+                    this.props.ogrenciEkle.error.response 
+                    && (
+                            <Message negative>
+                              <Message.Header> Hata!!! </Message.Header>
+                              <p> Hata oluştu.  </p>
+                            </Message>
+                    )
+                }
             </Form>
             </div>
         )
