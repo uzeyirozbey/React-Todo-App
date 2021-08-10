@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import OgrenciCard from "../components/OgrenciComponents/ogrenciCard";
 import {Grid} from "semantic-ui-react";
 import HashLoader from "react-spinners/HashLoader";
-const Ogrencilist = ({ ogrenci }) => {
+const Ogrencilist = ({ ogrenci,ogrenciSil }) => {
     const emptyMessage = (
         <p> Öğrenci bulunamadı!!</p>
     );
@@ -17,7 +17,11 @@ const Ogrencilist = ({ ogrenci }) => {
                 ? <h3>Hata oluştu </h3> 
                 : <Grid stackable columns = {3}>
                     {
-                          ogrenci.ogrenci.map(ogrenci =>  <OgrenciCard key={ogrenci.ID_OGRENCI} ogrenci={ogrenci}/>)
+                          ogrenci.ogrenciList.map(ogrenci =>  
+                            <OgrenciCard 
+                              key={ogrenci.ID_OGRENCI} 
+                              ogrenciSil =  {ogrenciSil}
+                              ogrenci={ogrenci}/>)
                     }
                 </Grid>
             }
@@ -34,7 +38,8 @@ const Ogrencilist = ({ ogrenci }) => {
 Ogrencilist.propTypes = {
     // ogrenci : PropTypes.object.isRequired
     ogrenci : PropTypes.shape({
-        ogrenci :PropTypes.array.isRequired
+        ogrenciList :PropTypes.array.isRequired
     }).isRequired
 };
+
 export default Ogrencilist
